@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock paper scissors</title>
+  </head>
+  <body>
+    <h1>Rock paper Scissors</h1>
+    <button
+      onclick="
+            play(`rock`);
+        
+    "
+    >
+      Rock
+    </button>
+
+    <button
+      onclick="
+       play(`paper`)
+        
+    "
+    >
+      Paper
+    </button>
+    <button
+      onclick="
+       
+       play('scissor') 
+    "
+    >
+      Scissor
+    </button>
+
+    <script>
+      function play(userselected) {
+        let game = ["rock", "paper", "scissor"];
+
+        let randomValue = Math.floor(Math.random() * 3);
+
+        let pc = game[randomValue];
+
+        let userChoice = userselected;
+        let output = "";
+        if (userChoice === pc) {
+          console.log((output = `both tie`));
+        } else if (
+          (userChoice == "rock" && pc == "scissor") ||
+          (userChoice == "paper" && pc == "rock") ||
+          (userChoice == "scissor" && pc == "paper")
+        ) {
+          console.log("You win");
+        } else {
+          console.log(`Computer Wins`);
+        }
+      }
+    </script>
+  </body>
+</html>
