@@ -1,60 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rock paper scissors</title>
-  </head>
-  <body>
-    <h1>Rock paper Scissors</h1>
-    <button
-      onclick="
-            play(`rock`);
-        
-    "
-    >
-      Rock
-    </button>
+<body>
+  <!-- Game title -->
+  <p>Rock – Paper – Scissors</p>
 
-    <button
-      onclick="
-       play(`paper`)
-        
-    "
-    >
-      Paper
-    </button>
-    <button
-      onclick="
-       
-       play('scissor') 
-    "
-    >
-      Scissor
-    </button>
+  <!-- User move buttons -->
+  <button onclick="UserMove(`rock`)">Rock</button>
+  <button onclick="UserMove(`paper`)">paper</button>
+  <button onclick="UserMove(`scissor`)">Scissor</button>
 
-    <script>
-      function play(userselected) {
-        let game = ["rock", "paper", "scissor"];
+  <!-- Displays score -->
+  <p class="score_card"></p>
 
-        let randomValue = Math.floor(Math.random() * 3);
+  <!-- Reset score button -->
+  <button class="reset_btn" onclick="reset_Fun()">Reset Score</button>
 
-        let pc = game[randomValue];
+  <!-- Displays game result -->
+  <p class="game_click"></p>
 
-        let userChoice = userselected;
-        let output = "";
-        if (userChoice === pc) {
-          console.log((output = `both tie`));
-        } else if (
-          (userChoice == "rock" && pc == "scissor") ||
-          (userChoice == "paper" && pc == "rock") ||
-          (userChoice == "scissor" && pc == "paper")
-        ) {
-          console.log("You win");
-        } else {
-          console.log(`Computer Wins`);
-        }
+  <script>
+    // DOM elements
+    let score_card = document.getElementsByClassName("score_card")[0];
+    let game_click = document.getElementsByClassName("game_click")[0];
+    let reset_btn = document.getElementsByClassName("reset_btn")[0];
+
+    // Load score from localStorage
+    let score = JSON.parse(localStorage.getItem("score")) || {
+      win: 0,
+      lose: 0,
+      tie: 0,
+    };
+
+    // Show initial score
+    score_card.textContent = `Score → Wins: ${score.win}, Losses: ${score.lose}, Ties: ${score.tie}`;
+
+    let message = "";
+
+    // Handle user move
+    function UserMove(usermove) {
+      let pcmove = pcMove();
+
+      // Game logic
+      if (usermove === pcmove) {
+        message = "game tie";
+        score.tie++;
+      } else if (
+        (usermove === "rock" && pcmove === "scissor") ||
+        (usermove === "paper" && pcmove === "rock") ||
+        (usermove === "scissor" && pcmove === "paper")
+      ) {
+        message = "user wins";
+        score.win++;
+      } else {
+        message = "pc wins";
+        score.lose++;
       }
-    </script>
-  </body>
-</html>
+
+      // Update UI and storage
+      game_click.textContent = `${message} | You chose ${usermove} | PC chose ${pcmove}`;
+      score_card.textContent = `Score → Wins: ${score.win}, Losses: ${score.lose}, Ties: ${score.tie}`;
+      localStorage.setItem("score", JSON.stringify(score));
+    }
+
+    // Reset score
+    function reset_Fun() {
+      let score = { win: 0, lose: 0, tie: 0 };
+      localStorage.removeItem("score");
+      score_card.textContent = `Score → Wins: ${score.win}, Losses: ${score.lose}, Ties: ${score.tie}`;
+    }
+
+    // Generate PC move
+    function pcMove() {
+      let choice = ["rock", "paper", "scissor"];
+      return choice[Math.floor(Math.random() * choice.length)];
+    }
+  </script>
+</body>
